@@ -17,16 +17,22 @@ def integrate(lower, upper):
         lower = float(lower)
         upper = float(upper)
 
-        N = int(request.args.get('N', 100))
-        if N <= 0:
-            return jsonify({"error": "N must be a positive integer"}), 400
-
-        result = numerical_integration(lower, upper, N)
+        N_s = [10, 100, 1000, 10000, 100000, 1000000]
+        results = [0, 0, 0, 0, 0, 0]
+        i=0
+        for N in N_s:
+            results[i] = numerical_integration(lower, upper, N)
+            i = i + 1
+        i=0
         return jsonify({
             "lower": lower,
             "upper": upper,
-            "N": N,
-            "result": result
+            "result for N=10": results[0],
+            "result for N=100": results[1],
+            "result for N=1k": results[2],
+            "result for N=10k": results[3],
+            "result for N=100k": results[4],
+            "result for N=1M": results[5],
         }), 200
     except ValueError:
         return jsonify({"error": "Bounds must be numeric"}), 400
